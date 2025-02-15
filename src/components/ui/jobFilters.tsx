@@ -11,16 +11,31 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "./select";
+import { prisma } from "@/lib/prisma";
 
-export default function JobFilters() {
+async function filterJobs(formData: FormData) {
+	"use server";
+	console.log(formData.get("search") as string);
+}
+
+export default async function JobFilters() {
+	const distinctLocations = await prisma.Job.findMany({
+		where: { approved: true },
+		select: { location: true },
+		distinct: ["location"],
+	});
 	return (
-		<Card className="h-max py-4 w-[320px]">
+		<Card className="h-max py-4 w-full sm:w-[320px]">
 			<CardContent>
-				<form>
+				<form action={filterJobs}>
 					<div className="grid w-full items-center gap-4">
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="search">Search</Label>
-							<Input id="search" placeholder="Title, company, etc." />
+							<Input
+								id="search"
+								name="search"
+								placeholder="Title, company, etc."
+							/>
 						</div>
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="type">Type</Label>
@@ -44,20 +59,29 @@ export default function JobFilters() {
 									<SelectValue placeholder="Select" />
 								</SelectTrigger>
 								<SelectContent position="popper">
-									<SelectItem value="fulltime">Full-Time</SelectItem>
-									<SelectItem value="parttime">Part-Time</SelectItem>
-									<SelectItem value="contract">Contract</SelectItem>
-									<SelectItem value="temporary">Temporary</SelectItem>
-									<SelectItem value="internship">Internship</SelectItem>
+									{distinctLocations.map(
+										(location: { location: string | null }) => {
+											return (
+												location.location !== null && (
+													<SelectItem
+														key={location.location}
+														value={location.location}
+													>
+														{location.location}
+													</SelectItem>
+												)
+											);
+										}
+									)}
 								</SelectContent>
 							</Select>
 						</div>
 					</div>
+					<Button type="submit" className="w-full mt-4">
+						Filter Jobs
+					</Button>
 				</form>
 			</CardContent>
-			<CardFooter>
-				<Button className="w-full">Filter Jobs</Button>
-			</CardFooter>
 		</Card>
 	);
 }

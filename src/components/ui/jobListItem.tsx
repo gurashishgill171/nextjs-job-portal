@@ -37,7 +37,7 @@ export default function JobListItem({ job }: JobListItemProps) {
 					</div>
 				</div>
 				<div className="flex flex-col justify-between">
-					<div className="bg-slate-200 p-[6px] rounded-md">
+					<div className="bg-slate-200 p-[6px] rounded-md flex items-center justify-center">
 						<span className="text-sm text-slate-800">{job.type}</span>
 					</div>
 					<p className="flex items-center gap-[4px]">
