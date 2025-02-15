@@ -42,7 +42,7 @@ export default async function JobResults({
 		orderBy: { createdAt: "desc" },
 	});
 	return (
-		<div className="flex flex-col space-y-4">
+		<div className="flex flex-col space-y-4 w-full">
 			{jobs.length === 0 && <h1 className="m-auto">No Jobs found...</h1>}
 			{jobs.map((job: Job) => {
 				return <JobListItem job={job} key={job.id} />;

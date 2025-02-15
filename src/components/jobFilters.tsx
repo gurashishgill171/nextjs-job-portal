@@ -45,7 +45,7 @@ export default async function JobFilters({ defaultValues }: JobFiltersProps) {
 	return (
 		<Card className="h-max py-4 w-full sm:w-[320px]">
 			<CardContent>
-				<form action={filterJobs}>
+				<form action={filterJobs} key={JSON.stringify(defaultValues)}>
 					<div className="grid w-full items-center gap-4">
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="search">Search</Label>
