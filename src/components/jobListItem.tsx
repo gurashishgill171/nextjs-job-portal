@@ -1,7 +1,7 @@
 /** @format */
 
 import { Job } from "@prisma/client";
-import { Card, CardContent } from "./card";
+import { Card, CardContent } from "./ui/card";
 import { MapPin, Globe, DollarSign, Clock } from "lucide-react";
 import { formatDistance } from "date-fns";
 import { formatCurrency } from "@/lib/utils";

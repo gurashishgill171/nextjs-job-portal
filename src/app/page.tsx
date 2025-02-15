@@ -1,6 +1,6 @@
 /** @format */
-import JobFilters from "@/components/ui/jobFilters";
-import JobResults from "@/components/ui/jobResults";
+import JobFilters from "@/components/jobFilters";
+import JobResults from "@/components/jobResults";
 import { JobFilterValues } from "@/lib/validations";
 
 interface PageProps {
@@ -18,7 +18,7 @@ export default async function Home({
 	return (
 		<main className="max-w-5xl m-auto px-3 my-10">
 			<section className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row">
-				<JobFilters />
+				<JobFilters defaultValues={filterValues} />
 				<JobResults filterValues={filterValues} />
 			</section>
 		</main>

@@ -1,19 +1,20 @@
 /** @format */
 
-import { Button } from "./button";
-import { Card, CardContent, CardFooter } from "./card";
-import { Input } from "./input";
-import { Label } from "./label";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "./select";
+} from "./ui/select";
 import { prisma } from "@/lib/prisma";
-import { JobFilterSchema } from "@/lib/validations";
-import { redirect } from "../../../node_modules/next/navigation";
+import { JobFilterSchema, JobFilterValues } from "@/lib/validations";
+import { redirect } from "../../node_modules/next/navigation";
+import FormSubmitButton from "./FormSubmitButton";
 
 async function filterJobs(formData: FormData) {
 	"use server";
@@ -31,7 +32,11 @@ async function filterJobs(formData: FormData) {
 	redirect(`/?${searchParams.toString()}`);
 }
 
-export default async function JobFilters() {
+interface JobFiltersProps {
+	defaultValues: JobFilterValues;
+}
+
+export default async function JobFilters({ defaultValues }: JobFiltersProps) {
 	const distinctLocations = await prisma.Job.findMany({
 		where: { approved: true },
 		select: { location: true },
@@ -48,11 +53,12 @@ export default async function JobFilters() {
 								id="search"
 								name="search"
 								placeholder="Title, company, etc."
+								defaultValue={defaultValues.search}
 							/>
 						</div>
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="type">Type</Label>
-							<Select id="type" name="type">
+							<Select id="type" name="type" defaultValue={defaultValues.type}>
 								<SelectTrigger>
 									<SelectValue placeholder="Select" />
 								</SelectTrigger>
@@ -67,7 +73,11 @@ export default async function JobFilters() {
 						</div>
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="location">Location</Label>
-							<Select id="location" name="location">
+							<Select
+								id="location"
+								name="location"
+								defaultValue={defaultValues.location}
+							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select" />
 								</SelectTrigger>
@@ -90,9 +100,9 @@ export default async function JobFilters() {
 							</Select>
 						</div>
 					</div>
-					<Button type="submit" className="w-full mt-4">
+					<FormSubmitButton className="w-full mt-4">
 						Filter Jobs
-					</Button>
+					</FormSubmitButton>
 				</form>
 			</CardContent>
 		</Card>
