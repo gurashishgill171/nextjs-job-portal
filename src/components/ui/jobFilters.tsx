@@ -12,10 +12,23 @@ import {
 	SelectValue,
 } from "./select";
 import { prisma } from "@/lib/prisma";
+import { JobFilterSchema } from "@/lib/validations";
+import { redirect } from "../../../node_modules/next/navigation";
 
 async function filterJobs(formData: FormData) {
 	"use server";
-	console.log(formData.get("search") as string);
+
+	const values = Object.fromEntries(formData.entries());
+
+	const { search, type, location } = JobFilterSchema.parse(values);
+
+	const searchParams = new URLSearchParams({
+		...(search && { search: search.trim() }),
+		...(type && { type: type }),
+		...(location && { location: location }),
+	});
+
+	redirect(`/?${searchParams.toString()}`);
 }
 
 export default async function JobFilters() {
@@ -39,23 +52,23 @@ export default async function JobFilters() {
 						</div>
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="type">Type</Label>
-							<Select>
-								<SelectTrigger id="type">
+							<Select id="type" name="type">
+								<SelectTrigger>
 									<SelectValue placeholder="Select" />
 								</SelectTrigger>
 								<SelectContent position="popper">
-									<SelectItem value="fulltime">Full-Time</SelectItem>
-									<SelectItem value="parttime">Part-Time</SelectItem>
-									<SelectItem value="contract">Contract</SelectItem>
-									<SelectItem value="temporary">Temporary</SelectItem>
-									<SelectItem value="internship">Internship</SelectItem>
+									<SelectItem value="Full-Time">Full-Time</SelectItem>
+									<SelectItem value="Part-Time">Part-Time</SelectItem>
+									<SelectItem value="Contract">Contract</SelectItem>
+									<SelectItem value="Temporary">Temporary</SelectItem>
+									<SelectItem value="Internship">Internship</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
 						<div className="flex flex-col space-y-1.5">
 							<Label htmlFor="location">Location</Label>
-							<Select>
-								<SelectTrigger id="location">
+							<Select id="location" name="location">
+								<SelectTrigger>
 									<SelectValue placeholder="Select" />
 								</SelectTrigger>
 								<SelectContent position="popper">
